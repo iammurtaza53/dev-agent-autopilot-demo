@@ -1,74 +1,78 @@
-# Demo Todo App
+# Dev Agent Autopilot Demo
 
-A tiny, dependency-free Node project for trying **Dev Agent Autopilot** end to end in about ten minutes.
+This repository is a small end-to-end validation project for **Dev Agent Autopilot**.
 
-`NEXT_TASK.md` already contains a small feature request (filtering, removal and a summary). You'll watch Codex plan it, Claude Code build and test it, Codex review it, and a pull request appear with CI running. You do the merge.
+Main project: https://github.com/iammurtaza53/dev-agent-autopilot
 
-## Try it
+It started as the public Todo demo bundled with Dev Agent Autopilot and was copied into its own repository so the complete workflow could be tested against a real GitHub repository and pull request.
 
-You need the [requirements](../../README.md#requirements) installed and signed in, and `dev-autopilot` installed.
+## What this repo validates
 
-**1. Copy the demo into its own GitHub repo.**
+The first real run successfully exercised the full workflow:
 
-macOS / Linux:
+```text
+NEXT_TASK.md
+  -> Codex plans in a read-only sandbox
+  -> Claude Code implements
+  -> deterministic tests run
+  -> Codex independently reviews
+  -> Claude fixes review findings
+  -> pull request opens
+  -> GitHub CI runs
+  -> human merge gate
+  -> owner merges
+  -> post-merge tests run
+```
+
+Autopilot did **not** merge the pull request itself.
+
+## Validation result
+
+The first end-to-end run completed successfully in:
+
+- PR #1: https://github.com/iammurtaza53/dev-autopilot-demo/pull/1
+- merged commit: `fefeb82441a692b236213e693262fb1c2105f3d7`
+
+The task added:
+
+- todo filtering by status;
+- todo removal;
+- todo summary counts;
+- regression tests for the new behavior and error paths.
+
+Codex produced the implementation plan before coding, found one issue during review, Claude fixed it, a fresh Codex review passed, CI was green, and the owner performed the merge.
+
+## Run the demo locally
+
+Requirements:
+
+- Node.js
+- Git
+- GitHub CLI
+- Claude Code
+- Codex CLI
+- Dev Agent Autopilot
+
+Install dependencies are not required for this tiny demo because it has no external runtime dependencies.
+
+Run the test suite with:
 
 ```bash
-cp -r examples/demo-todo-app ~/demo-todo-app
-cd ~/demo-todo-app
+npm test
 ```
 
-Windows (PowerShell):
+## Re-running the Autopilot demo
 
-```powershell
-Copy-Item -Recurse examples\demo-todo-app $HOME\demo-todo-app
-cd $HOME\demo-todo-app
-```
+For a fresh end-to-end run, use the maintained demo source in the main Dev Agent Autopilot repository:
 
-Then, on any OS:
+https://github.com/iammurtaza53/dev-agent-autopilot/tree/main/examples/demo-todo-app
 
-```bash
-git init -b main
-git add .
-git commit -m "Initial demo"
-gh repo create demo-todo-app --private --source . --push
-```
+That version contains the current onboarding instructions.
 
-**2. Trust the folder in Claude Code once.** Run `claude`, accept the trust prompt, then type `/exit`.
+Dev Agent Autopilot v0.3.1 also ignores Claude background-session worktrees under `.claude/worktrees/`, so those local worktrees do not make the project appear dirty.
 
-**3. Onboard Autopilot.**
+## Purpose
 
-```bash
-dev-autopilot init
-```
+This is intentionally a tiny demo application, not a production Todo product. Its purpose is to provide a concrete, inspectable example of the Autopilot workflow and its human merge boundary.
 
-Open `.autopilot/config.json` and set the checks Claude must pass:
-
-```json
-"checks": ["npm test"]
-```
-
-Commit it:
-
-```bash
-git add .
-git commit -m "chore: add Dev Agent Autopilot"
-git push
-```
-
-**4. Launch.**
-
-```bash
-dev-autopilot doctor
-dev-autopilot run
-```
-
-`run` returns right away; the work continues in a Claude Code background session.
-
-**5. Watch it.**
-
-```bash
-dev-autopilot status
-dev-autopilot agents
-```
-
-When it finishes you'll have a pull request with the feature, new tests, a Codex plan summary and green CI. Review it and merge it yourself.
+**Codex plans. Claude Code builds. Codex reviews. You merge.**
