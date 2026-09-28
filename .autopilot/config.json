@@ -1,7 +1,7 @@
 {
   "version": 2,
   "project": {
-    "name": "dev-autopilot-demo",
+    "name": "dev-agent-autopilot-demo",
     "baseBranch": "main",
     "taskFile": "NEXT_TASK.md",
     "contextFiles": [
@@ -14,7 +14,7 @@
   },
   "claude": {
     "background": true,
-    "sessionNamePrefix": "autopilot-dev-autopilot-demo",
+    "sessionNamePrefix": "autopilot-dev-agent-autopilot-demo",
     "allowedTools": [
       "Read",
       "Write",

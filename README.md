@@ -30,7 +30,7 @@ Autopilot did **not** merge the pull request itself.
 
 The first end-to-end run completed successfully in:
 
-- PR #1: https://github.com/iammurtaza53/dev-autopilot-demo/pull/1
+- PR #1: https://github.com/iammurtaza53/dev-agent-autopilot-demo/pull/1
 - merged commit: `fefeb82441a692b236213e693262fb1c2105f3d7`
 
 The task added:
