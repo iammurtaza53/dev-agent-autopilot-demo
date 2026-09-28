@@ -1,8 +1,8 @@
-const STATUS_FILTERS = {
-  all: () => true,
-  open: (item) => !item.done,
-  done: (item) => item.done,
-};
+const STATUS_FILTERS = new Map([
+  ['all', () => true],
+  ['open', (item) => !item.done],
+  ['done', (item) => item.done],
+]);
 
 export function createTodoList() {
   const items = [];
@@ -32,8 +32,9 @@ export function createTodoList() {
     },
 
     list({ status = 'all' } = {}) {
-      if (!Object.hasOwn(STATUS_FILTERS, status)) throw new Error(`Unknown status: ${status}`);
-      return items.filter(STATUS_FILTERS[status]).map((item) => ({ ...item }));
+      const filter = STATUS_FILTERS.get(status);
+      if (!filter) throw new Error(`Unknown status: ${String(status)}`);
+      return items.filter(filter).map((item) => ({ ...item }));
     },
 
     summary() {

@@ -65,6 +65,16 @@ test('list rejects an unknown status', () => {
   assert.throws(() => todos.list({ status: 'toString' }), { message: 'Unknown status: toString' });
 });
 
+test('list rejects non-string statuses', () => {
+  const todos = seededList();
+  assert.throws(() => todos.list({ status: ['done'] }), { name: 'Error', message: 'Unknown status: done' });
+  assert.throws(() => todos.list({ status: null }), { name: 'Error', message: 'Unknown status: null' });
+  assert.throws(() => todos.list({ status: Symbol('done') }), {
+    name: 'Error',
+    message: 'Unknown status: Symbol(done)',
+  });
+});
+
 test('filtered list returns copies, not the internal items', () => {
   const todos = seededList();
   todos.list({ status: 'done' })[0].title = 'changed';
