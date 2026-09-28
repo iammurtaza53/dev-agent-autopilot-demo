@@ -1,3 +1,9 @@
+const STATUS_FILTERS = new Map([
+  ['all', () => true],
+  ['open', (item) => !item.done],
+  ['done', (item) => item.done],
+]);
+
 export function createTodoList() {
   const items = [];
   let nextId = 1;
@@ -18,8 +24,22 @@ export function createTodoList() {
       return { ...todo };
     },
 
-    list() {
-      return items.map((item) => ({ ...item }));
+    remove(id) {
+      const index = items.findIndex((item) => item.id === id);
+      if (index === -1) throw new Error(`Todo ${id} not found`);
+      const [removed] = items.splice(index, 1);
+      return { ...removed };
+    },
+
+    list({ status = 'all' } = {}) {
+      const filter = STATUS_FILTERS.get(status);
+      if (!filter) throw new Error(`Unknown status: ${String(status)}`);
+      return items.filter(filter).map((item) => ({ ...item }));
+    },
+
+    summary() {
+      const done = items.filter((item) => item.done).length;
+      return { total: items.length, open: items.length - done, done };
     },
   };
 }
